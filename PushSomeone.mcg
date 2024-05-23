@@ -1,7 +1,7 @@
 {
   "Microgames": [
     {
-      "Title": "Push someone",
+      "Title": "PushSomeone",
       "Author": "Tenebrosful",
       "Launch": "\\Microgames\\PushSomeone\\PushSomeone.lua",
       "MinPlayers": 1,
