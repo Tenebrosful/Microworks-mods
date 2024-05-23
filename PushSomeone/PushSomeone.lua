@@ -38,3 +38,6 @@ end
 function OnPostMicrogame_definedPlayer()
   print("Microgame has ended!")
 end
+
+microgame = CreateMicrogame("PushSomeone", microgameMusic, { defaultVariation, definedPlayerVariation },
+  { Difficulty = Difficulty.Easy, Rarity = 8, MinPlayers = 2, Type = MicrogameType.WinBeforeEnd, PlayEffect = true })
