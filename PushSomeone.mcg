@@ -1,0 +1,15 @@
+{
+  "Microgames": [
+    {
+      "Title": "Push someone",
+      "Author": "Tenebrosful",
+      "Launch": "\\Microgames\\PushSomeone\\PushSomeone.lua",
+      "MinPlayers": 2,
+      "Difficulty": 1,
+      "I18n": {
+        "en": "\\Microgames\\PushSomeone\\Locale\\en.json",
+        "fr": "\\Microgames\\PushSomeone\\Locale\\fr.json"
+      }
+    }
+  ]
+}
