@@ -1,3 +1,14 @@
+local microgame
+local contentRoot = "\\Microgames\\PushSomeone"
+local microgameMusic = {
+  LoadResource(contentRoot .. "\\Music\\PushSomeone_100.ogg", ResourceType.Audio),
+  LoadResource(contentRoot .. "\\Music\\PushSomeone_111.ogg", ResourceType.Audio),
+  LoadResource(contentRoot .. "\\Music\\PushSomeone_122.ogg", ResourceType.Audio),
+  LoadResource(contentRoot .. "\\Music\\PushSomeone_133.ogg", ResourceType.Audio),
+  LoadResource(contentRoot .. "\\Music\\PushSomeone_144.ogg", ResourceType.Audio),
+  LoadResource(contentRoot .. "\\Music\\PushSomeone_155.ogg", ResourceType.Audio),
+}
+
 local defaultVariation = CreateMicrogameVariation("default", OnBeginMicrogame_default, OnMicrogameTick_default,
   OnPostMicrogame_default)
 
