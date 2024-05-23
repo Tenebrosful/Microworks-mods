@@ -1,0 +1,7 @@
+{
+  "values": {
+    "Microgame_PushSomeone_BaseName": "Pousse quelqu'un",
+    "PushSomeone_default": "Pousse un autre joueur",
+    "PushSomeone_definedPlayer": "Pousse {player}"
+  }
+}
