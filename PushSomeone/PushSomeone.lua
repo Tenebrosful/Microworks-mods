@@ -1,5 +1,6 @@
 local microgame
 local contentRoot = "\\Microgames\\PushSomeone"
+local coordinator = worldInfo:GetCoordinator()
 local microgameMusic = {
   LoadResource(contentRoot .. "\\Music\\PushSomeone_100.ogg", ResourceType.Audio),
   LoadResource(contentRoot .. "\\Music\\PushSomeone_111.ogg", ResourceType.Audio),
@@ -9,6 +10,15 @@ local microgameMusic = {
   LoadResource(contentRoot .. "\\Music\\PushSomeone_155.ogg", ResourceType.Audio),
 }
 
+-- Is local player the server?
+local function IsServer()
+  return worldInfo:IsServer()
+end
+
+-- Get a player by their ID
+local function GetPlayerByID(playerID)
+  return worldInfo:GetPlayerByID(playerID)
+end
 local function OnBeginMicrogame_default()
   print("Microgame has begun!")
 end
