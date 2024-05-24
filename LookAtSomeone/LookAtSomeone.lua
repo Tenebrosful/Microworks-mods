@@ -10,6 +10,10 @@ local microgameMusic = {
   LoadResource(contentRoot .. "\\Music\\LookAtSomeone_155.ogg", ResourceType.Audio),
 }
 
+local function VectorToString(vector)
+  return string.format("(%f %f %f)", vector.x, vector.y, vector.z)
+end
+
 -- Is local player the server?
 local function IsServer()
   return worldInfo:IsServer()
