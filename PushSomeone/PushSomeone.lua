@@ -106,5 +106,31 @@ end
 -- local definedPlayerVariation = CreateMicrogameVariation("definedPlayer", OnBeginMicrogame_definedPlayer,
 -- OnMicrogameTick_definedPlayer, OnPostMicrogame_definedPlayer, 6)
 
-microgame = CreateMicrogame("PushSomeone", microgameMusic, { defaultVariation, definedPlayerVariation },
+-- Don't get pushed Variation
+
+local function OnBeginMicrogame_dontGetPushed()
+  if IsServer() then
+    for i, player in ipairs(worldInfo:GetAllActivePlayers()) do -- Mark all players as winners at the start
+      coordinator:MarkWinner(player:GetNetworkID(), true)
+    end
+
+    pushListenner = ListenFor("PlayerPushed",
+      function(pay)
+        if not coordinator:IsMarkedAWinner(pay:GetPushedPlayer():GetNetworkID()) then return end -- return early if already looser
+
+        coordinator:UnmarkWinner(pay:GetPushedPlayer():GetNetworkID())
+      end)
+  end
+end
+
+local function OnMicrogameTick_dontGetPushed(fTimeLeft) end
+
+local function OnPostMicrogame_dontGetPushed()
+  if IsServer() then RemoveEventListener(pushListenner) end
+end
+
+local dontGetPushedVariation = CreateMicrogameVariation("dontGetPushed", OnBeginMicrogame_dontGetPushed,
+  OnMicrogameTick_dontGetPushed, OnPostMicrogame_dontGetPushed)
+
+microgame = CreateMicrogame("PushSomeone", microgameMusic, { defaultVariation, dontGetPushedVariation },
   { Difficulty = Difficulty.Easy, Rarity = 8, MinPlayers = 2, Type = MicrogameType.WinBeforeEnd, PlayEffect = true })
