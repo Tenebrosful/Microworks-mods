@@ -24,6 +24,12 @@ local function GetPlayerByID(playerID)
   return worldInfo:GetPlayerByID(playerID)
 end
 
+-- Send Local message
+local function ShowMessageLocal(message)
+  print(message)
+  worldInfo:ShowMessageLocal(message)
+end
+
 -- Default Variation
 local function OnBeginMicrogame_default()
 
