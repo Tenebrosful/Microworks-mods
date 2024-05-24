@@ -103,8 +103,8 @@ local function OnPostMicrogame_definedPlayer()
   playerAssignement = {}
 end
 
-local definedPlayerVariation = CreateMicrogameVariation("definedPlayer", OnBeginMicrogame_definedPlayer,
-  OnMicrogameTick_definedPlayer, OnPostMicrogame_definedPlayer, 6)
+-- local definedPlayerVariation = CreateMicrogameVariation("definedPlayer", OnBeginMicrogame_definedPlayer,
+-- OnMicrogameTick_definedPlayer, OnPostMicrogame_definedPlayer, 6)
 
 microgame = CreateMicrogame("PushSomeone", microgameMusic, { defaultVariation, definedPlayerVariation },
   { Difficulty = Difficulty.Easy, Rarity = 8, MinPlayers = 2, Type = MicrogameType.WinBeforeEnd, PlayEffect = true })
