@@ -1,0 +1,15 @@
+{
+  "Microgames": [
+    {
+      "Title": "LookAtSomeone",
+      "Author": "Tenebrosful",
+      "Launch": "\\Microgames\\LookAtSomeone\\LookAtSomeone.lua",
+      "MinPlayers": 2,
+      "Difficulty": 1,
+      "I18n": {
+        "en": "\\Microgames\\LookAtSomeone\\Locale\\en.json",
+        "fr": "\\Microgames\\LookAtSomeone\\Locale\\fr.json"
+      }
+    }
+  ]
+}
