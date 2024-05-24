@@ -24,18 +24,20 @@ end
 
 -- Default Variation
 local function OnBeginMicrogame_default()
-  pushListenner = ListenFor("PlayerPushed",
-    function(pay)
-      if coordinator:IsMarkedAWinner(pay:GetPusherPlayer():GetNetworkID()) then return end -- return early if already winner
+  if IsServer() then
+    pushListenner = ListenFor("PlayerPushed",
+      function(pay)
+        if coordinator:IsMarkedAWinner(pay:GetPusherPlayer():GetNetworkID()) then return end -- return early if already winner
 
-      coordinator:MarkWinner(pay:GetPusherPlayer():GetNetworkID(), false)
-    end)
+        coordinator:MarkWinner(pay:GetPusherPlayer():GetNetworkID(), false)
+      end)
+  end
 end
 
 local function OnMicrogameTick_default(fTimeLeft) end
 
 local function OnPostMicrogame_default()
-  RemoveEventListener(pushListenner)
+  if IsServer() then RemoveEventListener(pushListenner) end
 end
 
 local defaultVariation = CreateMicrogameVariation("default", OnBeginMicrogame_default,
@@ -82,22 +84,22 @@ local function OnBeginMicrogame_definedPlayer()
       print("[PushSomeone] " .. GetPlayerByID(player):GetSteamName() .. "->" .. GetPlayerByID(target):GetSteamName())
       worldGlobals.PushSomeone_PlayerToPush(GetPlayerByID(player), target)
     end
+
+    pushListenner = ListenFor("PlayerPushed",
+      function(pay)
+        if coordinator:IsMarkedAWinner(pay:GetPusherPlayer():GetNetworkID()) then return end -- return early if already winner
+
+        if playerAssignement[pay:GetPusherPlayer():GetNetworkID()] == pay:GetPushedPlayer():GetNetworkID() then
+          coordinator:MarkWinner(pay:GetPusherPlayer():GetNetworkID())
+        end
+      end)
   end
-
-  pushListenner = ListenFor("PlayerPushed",
-    function(pay)
-      if coordinator:IsMarkedAWinner(pay:GetPusherPlayer():GetNetworkID()) then return end -- return early if already winner
-
-      if playerAssignement[pay:GetPusherPlayer():GetNetworkID()] == pay:GetPushedPlayer():GetNetworkID() then
-        coordinator:MarkWinner(pay:GetPusherPlayer():GetNetworkID())
-      end
-    end)
 end
 
 local function OnMicrogameTick_definedPlayer(fTimeLeft) end
 
 local function OnPostMicrogame_definedPlayer()
-  RemoveEventListener(pushListenner)
+  if IsServer then RemoveEventListener(pushListenner) end
   microgame:ResetTranslationData()
   playerAssignement = {}
   playerToPush = nil
