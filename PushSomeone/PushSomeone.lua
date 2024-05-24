@@ -76,7 +76,7 @@ RPC("PushSomeone_PlayerToPush", SendTo.TargetClient, Delivery.Reliable, function
   microgame:SetTranslationData("definedPlayer", playerToPush) -- Works only for the first time then don't works for Client but works for Host
 end)
 
-local function OnBeginMicrogame_definedPlayer()
+local function onPrepareMicrogame_definedPlayer()
   if IsServer() then
     assignPlayerTarget(worldInfo:GetAllActivePlayers())
     for player, target in pairs(playerAssignement) do
@@ -95,16 +95,19 @@ local function OnBeginMicrogame_definedPlayer()
   end
 end
 
+local function OnBeginMicrogame_definedPlayer() end
+
 local function OnMicrogameTick_definedPlayer(fTimeLeft) end
 
 local function OnPostMicrogame_definedPlayer()
-  if IsServer() then RemoveEventListener(pushListenner) end
+  if IsServer() then
+    RemoveEventListener(pushListenner); playerAssignement = {}
+  end
   microgame:ResetTranslationData()
-  playerAssignement = {}
 end
 
--- local definedPlayerVariation = CreateMicrogameVariation("definedPlayer", OnBeginMicrogame_definedPlayer,
--- OnMicrogameTick_definedPlayer, OnPostMicrogame_definedPlayer, 6)
+local definedPlayerVariation = CreatePreparedMicrogameVariation("definedPlayer", onPrepareMicrogame_definedPlayer,
+  OnBeginMicrogame_definedPlayer, OnMicrogameTick_definedPlayer, OnPostMicrogame_definedPlayer, 6)
 
 -- Don't get pushed Variation
 
@@ -119,6 +122,7 @@ local function OnBeginMicrogame_dontGetPushed()
         if not coordinator:IsMarkedAWinner(pay:GetPushedPlayer():GetNetworkID()) then return end -- return early if already looser
 
         coordinator:UnmarkWinner(pay:GetPushedPlayer():GetNetworkID())
+        pay:GetPushedPlayer():PlayWinEffect(WinState.Fail)
       end)
   end
 end
@@ -132,5 +136,6 @@ end
 local dontGetPushedVariation = CreateMicrogameVariation("dontGetPushed", OnBeginMicrogame_dontGetPushed,
   OnMicrogameTick_dontGetPushed, OnPostMicrogame_dontGetPushed)
 
-microgame = CreateMicrogame("PushSomeone", microgameMusic, { defaultVariation, dontGetPushedVariation },
+microgame = CreateMicrogame("PushSomeone", microgameMusic,
+  { defaultVariation, definedPlayerVariation, dontGetPushedVariation },
   { Difficulty = Difficulty.Easy, Rarity = 8, MinPlayers = 2, Type = MicrogameType.WinBeforeEnd, PlayEffect = true })
