@@ -42,7 +42,7 @@ local defaultVariation = CreateMicrogameVariation("default", OnBeginMicrogame_de
   OnMicrogameTick_default, OnPostMicrogame_default)
 
 -- Defined player Variation
-local playerAssignement = {} -- Table used by server to know who must push who
+local playerAssignement = {} -- Table used by Server to know who must push who
 local playerToPush           -- PlayerName used by Client to know who he has to push
 
 local function assignPlayerTarget(allActivePlayers)
@@ -68,15 +68,18 @@ local function assignPlayerTarget(allActivePlayers)
   end
 end
 
+-- Receive which player you have to push and display it
 RPC("PushSomeone_PlayerToPush", SendTo.TargetClient, Delivery.Reliable, function(playerID)
+  print("[PushSomeone] You have to push " .. GetPlayerByID(playerID):GetSteamName())
   playerToPush = GetPlayerByID(playerID):GetSteamName()
-  microgame:SetTranslationData("definedPlayer", playerToPush)
+  microgame:SetTranslationData("definedPlayer", playerToPush) -- Works only for the first time then don't works for Client but works for Host
 end)
 
 local function OnBeginMicrogame_definedPlayer()
   if IsServer() then
     assignPlayerTarget(worldInfo:GetAllActivePlayers())
     for player, target in pairs(playerAssignement) do
+      print("[PushSomeone] " .. GetPlayerByID(player):GetSteamName() .. "->" .. GetPlayerByID(target):GetSteamName())
       worldGlobals.PushSomeone_PlayerToPush(GetPlayerByID(player), target)
     end
   end
