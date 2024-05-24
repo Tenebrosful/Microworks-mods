@@ -99,7 +99,7 @@ end
 local function OnMicrogameTick_definedPlayer(fTimeLeft) end
 
 local function OnPostMicrogame_definedPlayer()
-  if IsServer then RemoveEventListener(pushListenner) end
+  if IsServer() then RemoveEventListener(pushListenner) end
   microgame:ResetTranslationData()
   playerAssignement = {}
   playerToPush = nil
