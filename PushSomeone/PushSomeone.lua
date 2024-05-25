@@ -22,6 +22,15 @@ local function GetPlayerByID(playerID)
   return worldInfo:GetPlayerByID(playerID)
 end
 
+-- Mark all players as winners at the start
+local function MarkAllAsWinner()
+  if not IsServer() then return end
+
+  for i, player in ipairs(worldInfo:GetAllActivePlayers()) do
+    coordinator:MarkWinner(player:GetNetworkID(), true)
+  end
+end
+
 -- Default Variation
 local function OnBeginMicrogame_default()
   if IsServer() then
@@ -119,9 +128,7 @@ local definedPlayerVariation = CreatePreparedMicrogameVariation("definedPlayer",
 
 local function OnBeginMicrogame_dontGetPushed()
   if IsServer() then
-    for i, player in ipairs(worldInfo:GetAllActivePlayers()) do -- Mark all players as winners at the start
-      coordinator:MarkWinner(player:GetNetworkID(), true)
-    end
+    MarkAllAsWinner()
 
     pushListenner = ListenFor("PlayerPushed",
       function(pay)
