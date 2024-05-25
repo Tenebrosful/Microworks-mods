@@ -44,9 +44,11 @@ local defaultVariation = CreateMicrogameVariation("default", OnBeginMicrogame_de
   OnMicrogameTick_default, OnPostMicrogame_default)
 
 -- Defined player Variation
-local playerAssignement = {} -- Table used by Server to know who must push who
+local playerToPush
 
 local function assignPlayerTarget(allActivePlayers)
+  local playerAssignement = {}
+  if worldInfo:GetActivePlayersCount() == 1 then return { [allActivePlayers[1]] = allActivePlayers[1] } end
   for i, player in ipairs(allActivePlayers) do
     playerAssignement[player:GetNetworkID()] = allActivePlayers[math.random(#allActivePlayers)]:GetNetworkID()
 
@@ -67,18 +69,20 @@ local function assignPlayerTarget(allActivePlayers)
       end
     end
   end
+
+  return playerAssignement
 end
 
 -- Receive which player you have to push and display it
 RPC("PushSomeone_PlayerToPush", SendTo.TargetClient, Delivery.Reliable, function(playerID)
-  local playerToPush = GetPlayerByID(playerID):GetSteamName()
-  print("[PushSomeone] You have to push " .. playerToPush)
-  microgame:SetTranslationData("definedPlayer", playerToPush) -- Works only for the first time then don't works for Client but works for Host
+  playerToPush = GetPlayerByID(playerID)
+  print("[PushSomeone] You have to push " .. playerToPush:GetSteamName())
+  microgame:SetTranslationData("definedPlayer", playerToPush:GetSteamName())
 end)
 
 local function onPrepareMicrogame_definedPlayer()
   if IsServer() then
-    assignPlayerTarget(worldInfo:GetAllActivePlayers())
+    local playerAssignement = assignPlayerTarget(worldInfo:GetAllActivePlayers())
     for player, target in pairs(playerAssignement) do
       print("[PushSomeone] " .. GetPlayerByID(player):GetSteamName() .. "->" .. GetPlayerByID(target):GetSteamName())
       worldGlobals.PushSomeone_PlayerToPush(GetPlayerByID(player), target)
@@ -95,14 +99,16 @@ local function onPrepareMicrogame_definedPlayer()
   end
 end
 
-local function OnBeginMicrogame_definedPlayer() end
+local function OnBeginMicrogame_definedPlayer()
+  if playerToPush ~= nil then
+    coordinator:AddTargetIndicator(playerToPush:GetTransform(), IndicatorType.Objective)
+  end
+end
 
 local function OnMicrogameTick_definedPlayer(fTimeLeft) end
 
 local function OnPostMicrogame_definedPlayer()
-  if IsServer() then
-    RemoveEventListener(pushListenner); playerAssignement = {}
-  end
+  if IsServer() then RemoveEventListener(pushListenner) end
   microgame:ResetTranslationData()
 end
 
