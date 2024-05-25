@@ -39,6 +39,7 @@ local function OnBeginMicrogame_default()
         if coordinator:IsMarkedAWinner(pay:GetPusherPlayer():GetNetworkID()) then return end -- return early if already winner
 
         coordinator:MarkWinner(pay:GetPusherPlayer():GetNetworkID(), false)
+        pay:GetPushedPlayer():PlayWinEffect(WinState.Pass)
       end)
   end
 end
@@ -104,6 +105,7 @@ local function onPrepareMicrogame_definedPlayer()
 
         if playerAssignement[pay:GetPusherPlayer():GetNetworkID()] == pay:GetPushedPlayer():GetNetworkID() then
           coordinator:MarkWinner(pay:GetPusherPlayer():GetNetworkID())
+          pay:GetPushedPlayer():PlayWinEffect(WinState.Pass)
         end
       end)
   end
@@ -152,4 +154,4 @@ local dontGetPushedVariation = CreateMicrogameVariation("dontGetPushed", OnBegin
 
 microgame = CreateMicrogame("PushSomeone", microgameMusic,
   { defaultVariation, definedPlayerVariation, dontGetPushedVariation },
-  { Difficulty = Difficulty.Easy, Rarity = 8, MinPlayers = 2, Type = MicrogameType.WinBeforeEnd, PlayEffect = true })
+  { Difficulty = Difficulty.Easy, Rarity = 8, MinPlayers = 2, Type = MicrogameType.WinBeforeEnd, PlayEffect = false })
