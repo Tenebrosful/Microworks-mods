@@ -57,7 +57,8 @@ local playerToPush
 
 local function assignPlayerTarget(allActivePlayers)
   local playerAssignement = {}
-  if worldInfo:GetActivePlayersCount() == 1 then return { [allActivePlayers[1]] = allActivePlayers[1] } end
+  if worldInfo:GetActivePlayersCount() == 1 then return { [allActivePlayers[1]:GetNetworkID()] = allActivePlayers[1]
+    :GetNetworkID() } end
   for i, player in ipairs(allActivePlayers) do
     playerAssignement[player:GetNetworkID()] = allActivePlayers[math.random(#allActivePlayers)]:GetNetworkID()
 
