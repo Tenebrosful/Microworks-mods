@@ -1,6 +1,8 @@
 {
   "values": {
     "Microgame_LookAtSomeone_BaseName": "Regarde quelqu'un",
-    "LookAtSomeone_default": "Regarde quelqu'un"
+    "LookAtSomeone_default": "Regarde quelqu'un",
+    "LookAtSomeone_definedPlayer": "Regarde %{definedPlayer}",
+    "LookAtSomeone_dontLook": "Ne regarde personne"
   }
 }
