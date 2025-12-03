@@ -1,0 +1,15 @@
+{
+  "Microgames": [
+    {
+      "Title": "DancingFloor",
+      "Author": "Tenebrosful",
+      "Launch": "\\Microgames\\DancingFloor\\DancingFloor.lua",
+      "MinPlayers": 1,
+      "Difficulty": 1,
+      "I18n": {
+        "en": "\\Microgames\\DancingFloor\\Locale\\en.json",
+        "fr": "\\Microgames\\DancingFloor\\Locale\\fr.json"
+      }
+    }
+  ]
+}
